@@ -1,12 +1,9 @@
 # Draven-AIR
 
-Local service host for the 4.20 AIR game client.
+Local service host for the AIR game client.
 
 ## What this fork adds
 
-- simpler local bootstrap scripts for database, restore, build, and launch
-- direct AIR launch through a local Maestro bridge
-- broader service coverage for profile, lobby, inventory, queue, and history flows
 - configurable client-root redirection through `DRAVEN_GAME_CLIENT_ROOT`
 - safer local launch defaults for Windows
 
@@ -14,7 +11,7 @@ Local service host for the 4.20 AIR game client.
 
 1. Start the local stack:
    - `run_sql_and_draven.bat`
-2. Point the tools at your 4.20 game client root:
+2. Point the tools at your game client root:
    - `set DRAVEN_GAME_CLIENT_ROOT=C:\Path\To\GameClient420`
    - or pass the path directly to the launcher script
 3. Launch the direct AIR flow:
