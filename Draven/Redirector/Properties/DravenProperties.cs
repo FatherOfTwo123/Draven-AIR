@@ -4,10 +4,10 @@
     {
         //TODO get this info from system.yaml in the LOL's folder
         private string _host = Program.RTMPSHost;
-        private string _xmpp_server_url = "192.168.178.20";//"chat.oc1.lol.riotgames.com";
+        private string _xmpp_server_url = Program.RTMPSHost;//"chat.oc1.lol.riotgames.com";
         private string _lq_uri = "http://" + Program.RTMPSHost + ":8080";//"https://lq.oc1.lol.riotgames.com";
-        private string _lobbyLandingURL = "http://25.120.134.146:8080";
-        private string _featuredGamesURL = "http://25.120.134.146:8080/observer-mode";//"http://spectator.oc1.lol.riotgames.com:80/observer-mode/rest/featured";
+        private string _lobbyLandingURL = "http://" + Program.RTMPSHost + ":8080";
+        private string _featuredGamesURL = "http://" + Program.RTMPSHost + ":8080/observer-mode";//"http://spectator.oc1.lol.riotgames.com:80/observer-mode/rest/featured";
 
         //-------------------------------------------------------------------------------------
 
@@ -33,8 +33,8 @@
 
         public string riotDataServiceDataSendProbability { get { return "1.0"; } }
 
-        public string platformId { get { return "EUW1"; } }
+        public string platformId { get { return "NA1"; } }
 
-        public string regionTag { get { return "euw"; } }
+        public string regionTag { get { return "na"; } }
     }
 }

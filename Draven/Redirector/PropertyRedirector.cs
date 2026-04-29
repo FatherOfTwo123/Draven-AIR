@@ -28,6 +28,12 @@ namespace Draven.Redirector
         {
             _lastWrite = DateTime.MinValue;
 
+            if (string.IsNullOrWhiteSpace(Program.LeagueDrive) || !Directory.Exists(Program.LeagueDrive))
+            {
+                Console.WriteLine($"[WARN] Set {Program.GameClientRootEnvVar} to the 4.20 game client root to enable property redirection.");
+                return;
+            }
+
             _watcher = new FileSystemWatcher
             {
                 Path = Program.LeagueDrive, Filter = "lol.properties", IncludeSubdirectories = true, NotifyFilter = NotifyFilters.LastWrite
@@ -51,7 +57,7 @@ namespace Draven.Redirector
                 if (diffInSeconds < 5)
                     return;
 
-                Console.WriteLine($"[LOG] LoLPatcher detected, server redirected to {Program.RTMPSHost}");
+                Console.WriteLine($"[LOG] Client patcher detected, server redirected to {Program.RTMPSHost}");
 
                 //Generate the properties according to the current client's IP address
                 DravenProperties properties = new DravenProperties();

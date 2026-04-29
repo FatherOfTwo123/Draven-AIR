@@ -29,7 +29,7 @@ namespace Draven.Messages.SummonerIconService
                 var iconDto = new SummonerIcon
                 {
                     Icon = new object(),
-                    SummonerId = summonerSender._sumLvl,
+                    SummonerId = summonerSender._sumId,
                     IconId = iconData,
                     PurchaseDate = "/Date(1383172733000)/"
                 };

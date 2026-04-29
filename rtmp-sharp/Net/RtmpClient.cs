@@ -6,6 +6,7 @@ using RtmpSharp.Messaging.Events;
 using RtmpSharp.Messaging.Messages;
 using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;

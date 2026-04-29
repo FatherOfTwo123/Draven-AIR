@@ -33,6 +33,7 @@ namespace Draven.Messages.SummonerService
                 SummonerTalentsAndPoints = new SummonerTalentsAndPoints()
                 {
                     TalentPoints = 30,
+                    SummonerAssociatedTalents = DatabaseManager.DatabaseManager.GetCurrentMasteryEntries(summonerSender._sumId),
                     ModifyDate = new DateTime(2016, 08, 11, 12, 00, 00),
                     CreateDate = new DateTime(2016, 08, 11, 12, 00, 00),
                     SummonerId = summonerSender._sumId
@@ -45,7 +46,7 @@ namespace Draven.Messages.SummonerService
                     AcctId = summonerSender._accId,
                     HelpFlag = false,
                     SumId = summonerSender._sumId,
-                    ProfileIconId = Convert.ToInt32(summonerSender._sumIcon),
+                    ProfileIconId = DatabaseManager.DatabaseManager.NormalizeProfileIconId(Convert.ToInt32(summonerSender._sumIcon)),
                     DisplayEloQuestionaire = false,
                     LastGameDate = new DateTime(2016, 08, 11, 12, 00, 00),
                     RevisionDate = new DateTime(2016, 08, 11, 12, 00, 00),

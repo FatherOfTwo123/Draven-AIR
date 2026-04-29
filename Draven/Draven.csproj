@@ -93,6 +93,8 @@
     <Compile Include="DatabaseManager\Database Structures\ProfileIconTree.cs" />
     <Compile Include="DatabaseManager\Database Structures\ProfileJsonTree.cs" />
     <Compile Include="Helpers\ConsoleHelper.cs" />
+    <Compile Include="Messages\GameService\CreatePracticeGame.cs" />
+    <Compile Include="Messages\GameService\CreateTutorialGame.cs" />
     <Compile Include="Messages\ClientFacadeService\CallKudos.cs" />
     <Compile Include="Messages\ClientFacadeService\GetLoginDataPacketForUser.cs" />
     <Compile Include="Messages\IMessage.cs" />
@@ -103,6 +105,7 @@
     <Compile Include="Messages\LcdsGameInvitationService\GetPendingInvitations.cs" />
     <Compile Include="Messages\LcdsRerollService\GetPointsBalance.cs" />
     <Compile Include="Messages\LcdsServiceProxy\Call.cs" />
+    <Compile Include="Messages\LeaguesServiceProxy\GetAllLeaguesForPlayer.cs" />
     <Compile Include="Messages\LeaguesServiceProxy\GetAllMyLeagues.cs" />
     <Compile Include="Messages\LeaguesServiceProxy\GetMasterLeagueTopX.cs" />
     <Compile Include="Messages\LeaguesServiceProxy\GetChallengerLeague.cs" />
@@ -112,10 +115,12 @@
     <Compile Include="Messages\LoginService\Logout.cs" />
     <Compile Include="Messages\LoginService\PerformLCDSHeartBeat.cs" />
     <Compile Include="Messages\MasteryBookService\GetMasteryBook.cs" />
+    <Compile Include="Messages\MasteryBookService\SaveMasteryBook.cs" />
     <Compile Include="Messages\MatchmakerService\AttachToQueue.cs" />
     <Compile Include="Messages\MatchmakerService\GetAvailableQueues.cs" />
     <Compile Include="Messages\MessageHandler.cs" />
     <Compile Include="Messages\PlayerPreferencesService\LoadPreferencesByKey.cs" />
+    <Compile Include="Messages\PlayerStatsService\GetRecentGames.cs" />
     <Compile Include="Messages\PlayerStatsService\RetrievePlayerStatsByAccountId.cs" />
     <Compile Include="Messages\PlayerStatsService\RetrieveTopPlayedChampions.cs" />
     <Compile Include="Messages\SummonerIconService\GetSummonerIconInventory.cs" />

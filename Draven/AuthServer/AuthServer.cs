@@ -7,6 +7,7 @@
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
+    using System.Web;
 
     using Draven.DatabaseManager;
 
@@ -97,9 +98,44 @@
                     {
                         using (System.IO.StreamReader reader = new System.IO.StreamReader(body, request.ContentEncoding))
                         {
-                            string payloader = Uri.UnescapeDataString(reader.ReadToEnd()).Substring(8);
-                            string username = payloader.Split(',')[0].Split('=')[1];
-                            string password = payloader.Split(',')[1].Split('=')[1];
+                            string rawPayload = reader.ReadToEnd();
+                            string username = null;
+                            string password = null;
+
+                            var parsedBody = HttpUtility.ParseQueryString(rawPayload);
+                            username = parsedBody["user"] ?? parsedBody["username"];
+                            password = parsedBody["password"] ?? parsedBody["pass"];
+
+                            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+                            {
+                                string nestedPayload = parsedBody["payload"] ?? HttpUtility.UrlDecode(rawPayload);
+
+                                if (!string.IsNullOrWhiteSpace(nestedPayload))
+                                {
+                                    foreach (var entry in nestedPayload.Split(new[] { ',', '&' }, StringSplitOptions.RemoveEmptyEntries))
+                                    {
+                                        int separatorIndex = entry.IndexOf('=');
+
+                                        if (separatorIndex <= 0)
+                                            continue;
+
+                                        string key = entry.Substring(0, separatorIndex).Trim().ToLowerInvariant();
+                                        string value = entry.Substring(separatorIndex + 1).Trim();
+
+                                        if ((key == "user" || key == "username") && string.IsNullOrWhiteSpace(username))
+                                            username = value;
+
+                                        if ((key == "password" || key == "pass") && string.IsNullOrWhiteSpace(password))
+                                            password = value;
+                                    }
+                                }
+                            }
+
+                            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+                            {
+                                throw new Exception("Unable to parse login payload: " + rawPayload);
+                            }
+
                             if (DatabaseManager.checkAccount(username, password))
                             {
                                 Dictionary<string, string> data = DatabaseManager.getAccountData(username, password);
