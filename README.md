@@ -22,7 +22,7 @@ Local service host for the AIR game client.
 ## Entry scripts
 
 - `START_LOCAL_STACK.bat` — restore, build, database/bootstrap, then start `Draven.exe`
-- `START_DIRECT_AIR_CLIENT.bat` — ensure the local stack is running, then launch the 4.20 AIR client through the local Maestro bridge
+- `START_DIRECT_AIR_CLIENT.bat` — ensure the local stack is running, then launch the AIR client through the local Maestro bridge
 - `STOP_LOCAL_STACK.bat` — stop `Draven.exe`, the AIR client, and the local Maestro helper
 
 ## Documentation
@@ -42,4 +42,4 @@ Local service host for the AIR game client.
 
 - Direct AIR mode needs Node.js.
 - Helper scripts may download local tools into `%USERPROFILE%\tools` on first run.
-- The direct AIR launcher is tailored to the 4.20 client layout.
+- The direct AIR launcher is tailored to the season 4 client layout.
