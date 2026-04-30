@@ -16,6 +16,8 @@ Local service host for the AIR game client.
    - or pass the path directly to the launcher script
 3. Launch the direct AIR flow:
    - `RunDirectAirWithMaestro.bat "C:\Path\To\GameClient420"`
+4. Stop the local helper processes when done:
+   - `StopDravenAir.bat`
 
 ## Documentation
 

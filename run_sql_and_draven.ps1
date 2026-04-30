@@ -21,6 +21,9 @@ $NuGetExe = Join-Path $ToolRoot 'nuget.exe'
 $FrameworkPath = 'C:\Windows\Microsoft.NET\Framework\v4.0.30319'
 $DravenOutDir = 'bin\Release2\'
 $DravenExe = Join-Path $DravenRoot 'bin\Release2\Draven.exe'
+$DravenStdOutLog = Join-Path $RepoRoot 'draven-live-out.log'
+$DravenStdErrLog = Join-Path $RepoRoot 'draven-live-err.log'
+$DravenPidFile = Join-Path $RepoRoot 'draven.pid'
 $TranscriptPath = Join-Path $RepoRoot 'run_sql_and_draven.log'
 
 function Write-Step([string]$Message)
@@ -280,18 +283,35 @@ function Launch-Draven
         throw "Draven executable not found: $DravenExe"
     }
 
-    Write-Step 'Launching Draven in this console'
-    Write-Host ''
-    Push-Location (Split-Path $DravenExe -Parent)
-    try
+    Write-Step 'Launching Draven in background'
+
+    if (Test-Path $DravenStdOutLog)
     {
-        & $DravenExe
-        exit $LASTEXITCODE
+        Remove-Item $DravenStdOutLog -Force -ErrorAction SilentlyContinue
     }
-    finally
+
+    if (Test-Path $DravenStdErrLog)
     {
-        Pop-Location
+        Remove-Item $DravenStdErrLog -Force -ErrorAction SilentlyContinue
     }
+
+    $process = Start-Process -FilePath $DravenExe `
+        -WorkingDirectory (Split-Path $DravenExe -Parent) `
+        -WindowStyle Minimized `
+        -RedirectStandardOutput $DravenStdOutLog `
+        -RedirectStandardError $DravenStdErrLog `
+        -PassThru
+
+    Set-Content -Path $DravenPidFile -Value $process.Id
+    Start-Sleep -Milliseconds 800
+
+    if ($process.HasExited)
+    {
+        throw "Draven exited early. Check $DravenStdOutLog and $DravenStdErrLog"
+    }
+
+    Write-Step "Draven started with PID $($process.Id)"
+    Write-Step "Logs: $DravenStdOutLog"
 }
 
 Start-Transcript -Path $TranscriptPath -Append | Out-Null

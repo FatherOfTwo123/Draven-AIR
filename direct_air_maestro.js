@@ -29,6 +29,12 @@ const deployDir = path.join(gameRoot, 'RADS', 'projects', 'lol_air_client', 'rel
 const logPath = path.join(repoRoot, 'direct_air_maestro.log')
 const clientPort = 8393
 const gamePort = 8394
+const autoStopServer = process.env.DRAVEN_AUTO_STOP_SERVER === '1'
+
+let clientConnected = false
+let shuttingDown = false
+let clientServer = null
+let gameServer = null
 
 if (!gameRoot || !fs.existsSync(path.join(deployDir, 'LolClient.exe'))) {
   throw new Error('4.20 game client not found. Pass the client root folder to direct_air_maestro.js.')
@@ -54,6 +60,33 @@ let gameSocket = null
 function log(...parts) {
   const line = `[${new Date().toISOString()}] ${parts.join(' ')}`
   fs.appendFileSync(logPath, line + '\n')
+}
+
+function stopServerProcess() {
+  if (!autoStopServer) return
+
+  try {
+    spawn('taskkill', ['/IM', 'Draven.exe', '/F'], {
+      detached: true,
+      stdio: 'ignore',
+    }).unref()
+    log('cleanup', 'requested Draven.exe stop')
+  } catch (err) {
+    log('cleanup', 'failed to stop Draven.exe', err.message)
+  }
+}
+
+function shutdown(reason) {
+  if (shuttingDown) return
+  shuttingDown = true
+  log('shutdown', reason)
+
+  try { if (gameSocket && !gameSocket.destroyed) gameSocket.destroy() } catch {}
+  try { if (clientServer) clientServer.close() } catch {}
+  try { if (gameServer) gameServer.close() } catch {}
+
+  stopServerProcess()
+  setTimeout(() => process.exit(0), 500)
 }
 
 function packet(command, body = Buffer.alloc(0)) {
@@ -98,6 +131,9 @@ function attachSocket(name, socket, onMessage) {
   socket.on('close', () => {
     clearInterval(heartbeat)
     log(name, 'disconnected')
+    if (name === 'client' && clientConnected) {
+      setTimeout(() => shutdown('client disconnected'), 250)
+    }
   })
 
   socket.on('error', (err) => {
@@ -108,6 +144,7 @@ function attachSocket(name, socket, onMessage) {
 
 function startClientServer() {
   const server = net.createServer((socket) => {
+    clientConnected = true
     attachSocket('client', socket, (command, body, bodyText, clientSocket) => {
       switch (command) {
         case MSG.GAMECLIENT_CREATE:
@@ -124,6 +161,7 @@ function startClientServer() {
         case MSG.CLOSE:
           log('client', 'requested close')
           clientSocket.write(packet(MSG.REPLY))
+          setTimeout(() => shutdown('client requested close'), 250)
           break
         default:
           log('client', 'ignored command', String(command), bodyText)
@@ -194,6 +232,13 @@ function startClient() {
 }
 
 fs.writeFileSync(logPath, '')
-startClientServer()
-startGameServer()
+process.on('SIGINT', () => shutdown('SIGINT'))
+process.on('SIGTERM', () => shutdown('SIGTERM'))
+process.on('uncaughtException', (err) => {
+  log('fatal', err && err.stack ? err.stack : String(err))
+  shutdown('uncaughtException')
+})
+
+clientServer = startClientServer()
+gameServer = startGameServer()
 setTimeout(startClient, 1000)

@@ -39,7 +39,12 @@ This helper does the following:
 - imports the bundled database files
 - restores packages
 - builds `Draven.exe`
-- launches the service host
+- launches the service host in the background
+
+Server output goes to:
+
+- `draven-live-out.log`
+- `draven-live-err.log`
 
 If you want the helper to launch with a client root already configured:
 
@@ -60,6 +65,7 @@ What it does:
 - starts `Draven.exe` if it is not already running
 - starts the local Maestro bridge
 - launches the AIR client directly into the local stack
+- stops the temporary Maestro bridge when the client closes
 
 ## Troubleshooting
 
@@ -78,6 +84,16 @@ Fix:
 Cause: wrong folder level.
 
 Fix: pass the top-level 4.20 client folder, not the inner `deploy` folder.
+
+### Closing helpers
+
+Run:
+
+```bat
+StopDravenAir.bat
+```
+
+This stops the local Maestro helper, `Draven.exe`, and the AIR client if they are still running.
 
 ### `Draven.exe` not found
 
