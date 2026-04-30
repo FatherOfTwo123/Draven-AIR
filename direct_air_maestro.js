@@ -4,11 +4,27 @@ const path = require('path')
 const { spawn } = require('child_process')
 
 const repoRoot = __dirname
-const gameRoot = process.argv[2]
-  ? path.resolve(process.argv[2])
-  : process.env.DRAVEN_GAME_CLIENT_ROOT
-    ? path.resolve(process.env.DRAVEN_GAME_CLIENT_ROOT)
-    : ''
+const clientExeRelative = path.join('RADS', 'projects', 'lol_air_client', 'releases', '0.0.1.88', 'deploy', 'LolClient.exe')
+
+function hasClient(root) {
+  return !!root && fs.existsSync(path.join(root, clientExeRelative))
+}
+
+function resolveGameRoot() {
+  const candidates = []
+  if (process.argv[2]) candidates.push(path.resolve(process.argv[2]))
+  if (process.env.DRAVEN_GAME_CLIENT_ROOT) candidates.push(path.resolve(process.env.DRAVEN_GAME_CLIENT_ROOT))
+  candidates.push(path.resolve(repoRoot, '..', 'League of Legends'))
+  candidates.push(repoRoot)
+
+  for (const candidate of candidates) {
+    if (hasClient(candidate)) return candidate
+  }
+
+  return ''
+}
+
+const gameRoot = resolveGameRoot()
 const deployDir = path.join(gameRoot, 'RADS', 'projects', 'lol_air_client', 'releases', '0.0.1.88', 'deploy')
 const logPath = path.join(repoRoot, 'direct_air_maestro.log')
 const clientPort = 8393

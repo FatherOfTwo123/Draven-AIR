@@ -61,14 +61,6 @@ What it does:
 - starts the local Maestro bridge
 - launches the AIR client directly into the local stack
 
-## Visible server launch
-
-If you only want the server window without the direct AIR flow:
-
-```bat
-RunDravenVisible.bat "C:\Path\To\GameClient420"
-```
-
 ## Troubleshooting
 
 ### Property redirection warning
@@ -79,6 +71,7 @@ Fix:
 
 - set `DRAVEN_GAME_CLIENT_ROOT`
 - or launch the helper scripts with the 4.20 client path as the first argument
+- or keep the repo beside your 4.20 client folder so auto-detect can pick it up
 
 ### Direct AIR script says the client was not found
 

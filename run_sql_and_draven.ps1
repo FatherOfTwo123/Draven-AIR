@@ -1,8 +1,8 @@
-$ErrorActionPreference = 'Stop'
-
 param(
     [string]$GameClientRoot = ''
 )
+
+$ErrorActionPreference = 'Stop'
 
 $RepoRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 $SolutionPath = Join-Path $RepoRoot 'Draven.sln'
