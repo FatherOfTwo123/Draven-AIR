@@ -217,6 +217,7 @@ nuget.exe
 ClientBin/
 ~$*
 *~
+*.pid
 *.dbmdl
 *.dbproj.schemaview
 *.jfm

@@ -61,9 +61,11 @@ namespace RtmpSharp.Net
             if (listener == null)
                 return;
 
+            TcpClient client = null;
+
             try
             {
-                TcpClient client = listener.EndAcceptTcpClient(ar);
+                client = listener.EndAcceptTcpClient(ar);
                 var stream = await GetRtmpStreamAsync(client);
 
                 // read c0+c1
@@ -92,10 +94,23 @@ namespace RtmpSharp.Net
                 rtmpClient.ServerMessageReceived += ServerMessageReceived;
                 rtmpClient.ServerCommandReceived += ServerCommandReceived;
                 _clients.Add(rtmpClient);
+                client = null;
+            }
+            catch (Exception ex)
+            {
+                try { client?.Close(); } catch { }
+                Console.WriteLine("[WARN] RTMPS accept failed: " + ex.Message);
             }
             finally
             {
-                listener.BeginAcceptTcpClient(OnClientAccepted, listener);
+                try
+                {
+                    listener.BeginAcceptTcpClient(OnClientAccepted, listener);
+                }
+                catch
+                {
+                    // Listener closed.
+                }
             }
         }
 
