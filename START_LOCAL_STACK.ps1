@@ -24,7 +24,7 @@ $DravenExe = Join-Path $DravenRoot 'bin\Release2\Draven.exe'
 $DravenStdOutLog = Join-Path $RepoRoot 'draven-live-out.log'
 $DravenStdErrLog = Join-Path $RepoRoot 'draven-live-err.log'
 $DravenPidFile = Join-Path $RepoRoot 'draven.pid'
-$TranscriptPath = Join-Path $RepoRoot 'run_sql_and_draven.log'
+$TranscriptPath = Join-Path $RepoRoot 'START_LOCAL_STACK.log'
 
 function Write-Step([string]$Message)
 {

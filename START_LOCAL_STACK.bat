@@ -1,7 +1,7 @@
 @echo off
 setlocal
 pushd "%~dp0"
-powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0run_sql_and_draven.ps1" %*
+powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0START_LOCAL_STACK.ps1" %*
 set "EXIT_CODE=%ERRORLEVEL%"
 popd
 if not "%EXIT_CODE%"=="0" (

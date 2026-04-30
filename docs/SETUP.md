@@ -24,12 +24,68 @@ set DRAVEN_GAME_CLIENT_ROOT=C:\Path\To\GameClient420
 
 The folder you point to must be the top-level client folder that contains `RADS`.
 
+## What to run
+
+- `START_LOCAL_STACK.bat` — starts the local database/bootstrap flow and launches `Draven.exe`
+- `START_DIRECT_AIR_CLIENT.bat` — starts the direct AIR login flow against the local stack
+- `STOP_LOCAL_STACK.bat` — closes the local helper processes
+
+Run the direct AIR launcher from the repo root, not from the client folder.
+
+## Folder layout
+
+- `Draven/`
+  - main application code
+- `rtmp-sharp/`
+  - RTMP/RTMPS transport code
+- `Database/`
+  - SQL files imported during local bootstrap
+- `docs/`
+  - setup and change notes
+- repo root `.bat` / `.ps1`
+  - day-to-day launch and maintenance entrypoints
+
+## Where to configure things
+
+### Game client root
+
+Preferred options:
+
+- pass the 4.20 client root as the first argument to `START_LOCAL_STACK.bat` or `START_DIRECT_AIR_CLIENT.bat`
+- or set `DRAVEN_GAME_CLIENT_ROOT`
+
+### Server host, port, and database defaults
+
+Edit:
+
+- `Draven/Program.cs`
+
+Main values there:
+
+- `host`
+- `user`
+- `pass`
+- `database`
+- `RTMPSHost`
+- `RTMPSPort`
+- `AuthLocations`
+
+### Local tool download/cache folder
+
+The helper bootstrap script uses:
+
+- `%USERPROFILE%\tools`
+
+That location is defined in:
+
+- `START_LOCAL_STACK.ps1`
+
 ## First run
 
 Run:
 
 ```bat
-run_sql_and_draven.bat
+START_LOCAL_STACK.bat
 ```
 
 This helper does the following:
@@ -45,11 +101,12 @@ Server output goes to:
 
 - `draven-live-out.log`
 - `draven-live-err.log`
+- `START_LOCAL_STACK.log`
 
 If you want the helper to launch with a client root already configured:
 
 ```bat
-run_sql_and_draven.bat "C:\Path\To\GameClient420"
+START_LOCAL_STACK.bat "C:\Path\To\GameClient420"
 ```
 
 ## Direct AIR launch
@@ -57,7 +114,7 @@ run_sql_and_draven.bat "C:\Path\To\GameClient420"
 Run:
 
 ```bat
-RunDirectAirWithMaestro.bat "C:\Path\To\GameClient420"
+START_DIRECT_AIR_CLIENT.bat "C:\Path\To\GameClient420"
 ```
 
 What it does:
@@ -90,7 +147,7 @@ Fix: pass the top-level 4.20 client folder, not the inner `deploy` folder.
 Run:
 
 ```bat
-StopDravenAir.bat
+STOP_LOCAL_STACK.bat
 ```
 
 This stops the local Maestro helper, `Draven.exe`, and the AIR client if they are still running.
@@ -99,4 +156,4 @@ This stops the local Maestro helper, `Draven.exe`, and the AIR client if they ar
 
 Cause: server not built yet.
 
-Fix: run `run_sql_and_draven.bat` first.
+Fix: run `START_LOCAL_STACK.bat` first.

@@ -8,7 +8,7 @@ if "%GAME_CLIENT_ROOT%"=="" if exist "%~dp0..\League of Legends\RADS\projects\lo
 if "%GAME_CLIENT_ROOT%"=="" if exist "%~dp0RADS\projects\lol_air_client\releases\0.0.1.88\deploy\LolClient.exe" set "GAME_CLIENT_ROOT=%~dp0"
 
 if "%GAME_CLIENT_ROOT%"=="" (
-    echo Usage: RunDirectAirWithMaestro.bat "C:\Path\To\GameClient420"
+    echo Usage: START_DIRECT_AIR_CLIENT.bat "C:\Path\To\GameClient420"
     echo.
     echo Or set DRAVEN_GAME_CLIENT_ROOT before running this script.
     echo If the repo sits next to your 4.20 client folder, that path is auto-detected.
@@ -30,14 +30,14 @@ set "DRAVEN_GAME_CLIENT_ROOT=%GAME_CLIENT_ROOT%"
 set "DRAVEN_AUTO_STOP_SERVER="
 tasklist /FI "IMAGENAME eq Draven.exe" | find /I "Draven.exe" >nul
 if errorlevel 1 (
-    if not exist "%~dp0run_sql_and_draven.bat" (
-        echo run_sql_and_draven.bat not found.
+    if not exist "%~dp0START_LOCAL_STACK.bat" (
+        echo START_LOCAL_STACK.bat not found.
         pause
         exit /b 1
     )
 
     set "DRAVEN_AUTO_STOP_SERVER=1"
-    start "DravenBootstrap" /min /wait cmd /c ""%~dp0run_sql_and_draven.bat" "%GAME_CLIENT_ROOT%""
+    start "DravenBootstrap" /min /wait cmd /c ""%~dp0START_LOCAL_STACK.bat" "%GAME_CLIENT_ROOT%""
 
     powershell -NoProfile -ExecutionPolicy Bypass -Command "$deadline = (Get-Date).AddSeconds(20); while ((Get-Date) -lt $deadline) { $client = $null; try { $client = New-Object Net.Sockets.TcpClient; $iar = $client.BeginConnect('127.0.0.1', 8080, $null, $null); if ($iar.AsyncWaitHandle.WaitOne(250)) { exit 0 } } catch { } finally { if ($client) { $client.Close() } }; Start-Sleep -Milliseconds 500 }; exit 1" >nul 2>&1
     if errorlevel 1 (
