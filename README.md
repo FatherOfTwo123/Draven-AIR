@@ -10,12 +10,12 @@ Local service host for the AIR game client.
 ## Quick start
 
 1. Point the tools at your game client root:
-   - `set DRAVEN_GAME_CLIENT_ROOT=C:\Path\To\GameClient420`
+   - `set DRAVEN_GAME_CLIENT_ROOT=C:\Path\To\GameClient`
    - or pass the path directly to the launcher script
 2. Start the local stack:
-   - `START_LOCAL_STACK.bat "C:\Path\To\GameClient420"`
+   - `START_LOCAL_STACK.bat "C:\Path\To\GameClient"`
 3. Launch the direct AIR flow:
-   - `START_DIRECT_AIR_CLIENT.bat "C:\Path\To\GameClient420"`
+   - `START_DIRECT_AIR_CLIENT.bat "C:\Path\To\GameClient"`
 4. Stop the local helper processes when done:
    - `STOP_LOCAL_STACK.bat`
 
